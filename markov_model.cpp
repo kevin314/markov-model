@@ -10,7 +10,7 @@ using namespace std;
 class Sequence
 {
     public:
-        int AddCount() const;
+        int AddCount();
 
     private:
         int count_ = 0;
@@ -20,7 +20,7 @@ class MarkovModel
 {
     public:
         void InsertString();
-	void CharCount(string, Sequence, int);
+        void CharCount(string, int);
     private:
         map<string, Sequence> character_map_;
 };
@@ -37,36 +37,45 @@ int main()
 
     Sequence read_window();
 
-    sequence_map.CharCount(fileName, read_window, seed);
+    sequence_map.CharCount(fileName, seed);
 
 }
 
 
-int Sequence::AddCount() 
+int Sequence::AddCount()
 {
     count_++;
 }
 
-void MarkovModel::CharCount(string fileName, Sequence read_window, int seed)
+void MarkovModel::CharCount(string fileName, int seed)
 {
     ifstream inputFile;
     inputFile.open(fileName.c_str());
+
+    Sequence read_window;
 
     for(string line; getline(inputFile, line);)
     {
         for(int i = 0; i < line.length(); i++)
         {
-	    string window = "";
+            string window = "";
 
-	    for(int j = i; j < seed; j++)
-	    {
-		window += line[j];
-		
-	    }
-            
-	    read_window.AddCount();
+            for(int j = i; j < (i + seed); j++)
+            {
+                window += line[j];
+            }
+
+            cout << window << endl;
+
+            read_window.AddCount();
             character_map_.insert({window, read_window});
+
         }
+    }
+
+    for(auto const& pair : character_map_)
+    {
+        cout << pair.first << ": " << pair.second << endl;
     }
 }
 
