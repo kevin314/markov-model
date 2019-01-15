@@ -1,15 +1,16 @@
 #include <iostream>
 #include <fstream>
 #include <string>
+#include <cstring>
 #include <map>
 #include <vector>
+
 using namespace std;
 
 class Sequence
 {
     public:
-        void CharCount();
-        int GetCount() const;
+        int AddCount() const;
 
     private:
         int count_ = 0;
@@ -19,7 +20,7 @@ class MarkovModel
 {
     public:
         void InsertString();
-
+	void CharCount(string, Sequence, int);
     private:
         map<string, Sequence> character_map_;
 };
@@ -27,50 +28,58 @@ class MarkovModel
 int main()
 {
     string fileName;
+    int seed;
+
     cin >> fileName;
+    cin >> seed;
 
-    MarkovModel line_map;
+    MarkovModel sequence_map;
 
-    int i;
-    string line;
+    Sequence read_window();
 
-    for(line = "", i = 0; getline(inputFile, line); i++)
-    {
-        characterCount[i] = line_map.CharCount();
-    }
+    sequence_map.CharCount(fileName, read_window, seed);
 
 }
 
-void Sequence::CharCount(filename, MarkovModel)
+
+int Sequence::AddCount() 
+{
+    count_++;
+}
+
+void MarkovModel::CharCount(string fileName, Sequence read_window, int seed)
 {
     ifstream inputFile;
-    Sequence map_count_;
+    inputFile.open(fileName.c_str());
 
     for(string line; getline(inputFile, line);)
     {
         for(int i = 0; i < line.length(); i++)
         {
-            if(!character_map_.count(i))
-            {
-                count_ = 1;
-            }
-            else
-            {
-                count_ = character_map_.find(line[i]) + 1;
-            }
+	    string window = "";
 
-            character_map_.insert({line[i], map_count_});
+	    for(int j = i; j < seed; j++)
+	    {
+		window += line[j];
+		
+	    }
+            
+	    read_window.AddCount();
+            character_map_.insert({window, read_window});
         }
     }
 }
 
-int Sequence::GetCount() const
-{
-
-}
-
 void MarkovModel::InsertString()
 {
-    for(int i = 0; i < 
-    character_map_.insert()
 }
+
+/*if(!character_map_.count(j))
+{
+	read_window.SetCount()count_ = 1;
+}
+else
+{
+	read_window.SetCount()count_ = character_map_.find(line[j]) + 1;
+}
+*/
