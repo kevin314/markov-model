@@ -11,6 +11,7 @@ class Sequence
 {
     public:
         int AddCount();
+        int GetCount() const;
 
     private:
         int count_ = 0;
@@ -41,6 +42,10 @@ int main()
 
 }
 
+int Sequence::GetCount() const
+{
+    return count_;
+}
 
 int Sequence::AddCount()
 {
@@ -70,12 +75,14 @@ void MarkovModel::CharCount(string fileName, int seed)
             read_window.AddCount();
             character_map_.insert({window, read_window});
 
+            cout << read_window.GetCount();
+
         }
     }
 
     for(auto const& pair : character_map_)
     {
-        cout << pair.first << ": " << pair.second << endl;
+        cout << pair.first << ": " << pair.second.GetCount() << endl;
     }
 }
 
