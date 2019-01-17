@@ -57,8 +57,6 @@ void MarkovModel::CharCount(string fileName, int seed)
     ifstream inputFile;
     inputFile.open(fileName.c_str());
 
-    Sequence read_window;
-
     for(string line; getline(inputFile, line);)
     {
         for(int i = 0; i < line.length(); i++)
@@ -70,12 +68,18 @@ void MarkovModel::CharCount(string fileName, int seed)
                 window += line[j];
             }
 
+            if(character_map_.count(window) == 0)
+            {
+                Sequence read_window;
+
+                read_window.AddCount();
+                character_map_.insert({window, read_window});
+
+            } else {
+                character_map_[window].AddCount();
+            }
+
             cout << window << endl;
-
-            read_window.AddCount();
-            character_map_.insert({window, read_window});
-
-            cout << read_window.GetCount();
 
         }
     }
