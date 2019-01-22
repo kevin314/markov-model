@@ -37,7 +37,6 @@ int main()
 
     MarkovModel sequence_map;
 
-
     sequence_map.CharCount(fileName, seed);
 
 }
@@ -67,6 +66,7 @@ void MarkovModel::CharCount(string fileName, int seed)
             for(int j = i; j < (i + seed); j++)
             {
                 window += line[j];
+                //store characters after this window
             }
 
             if(character_map_.count(window) == 0)
@@ -101,18 +101,23 @@ void MarkovModel::CharCount(string fileName, int seed)
 
 
     int max_count = 0;
-    string first_seed;
+    string current_seed;
 
     for(auto i = character_map_.cbegin(); i != character_map_.cend(); i++)
     {
         if(i -> second.GetCount() > max_count)
         {
             max_count = i -> second.GetCount();
-            first_seed = i -> first;
+            current_seed = i -> first;
         }
     }
 
-    cout << "FIRST SEED: " << first_seed;
+    cout << "FIRST SEED: " << current_seed;
+
+    auto i = character_map_.find(current_seed);
+    i++;
+
+
 }
 
 void MarkovModel::InsertString()
