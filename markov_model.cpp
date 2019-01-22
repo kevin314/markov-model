@@ -4,6 +4,7 @@
 #include <cstring>
 #include <map>
 #include <vector>
+#include <iterator>
 
 using namespace std;
 
@@ -84,31 +85,34 @@ void MarkovModel::CharCount(string fileName, int seed)
             cout << window << endl;
 
         }
+    }
 
-        int max_count = 0;
-        string first_seed;
+    //char currSeed = character_map_[window].GetCount();
 
-        for(auto i = character_map_.cbegin(); i != character_map_.cend(); i++)
-        {
-            if(character_map_[i].GetCount() > maxCount)
-            {
-                max_count = character_map_[i].GetCount();
-                first_seed = i;
-            }
-        }
-
-
-        char currSeed = character_map_[window].GetCount();
-
-        /*for(int = i; i < numSequences; i++)
-        {
-        }
-        */
+    /*for(int = i; i < numSequences; i++)
+      {
+      }
+      */
 
     for(auto const& pair : character_map_)
     {
         cout << pair.first << ": " << pair.second.GetCount() << endl;
     }
+
+
+    int max_count = 0;
+    string first_seed;
+
+    for(auto i = character_map_.cbegin(); i != character_map_.cend(); i++)
+    {
+        if(i -> second.GetCount() > max_count)
+        {
+            max_count = i -> second.GetCount();
+            first_seed = i -> first;
+        }
+    }
+
+    cout << "FIRST SEED: " << first_seed;
 }
 
 void MarkovModel::InsertString()
