@@ -10,113 +10,103 @@ using namespace std;
 
 class Sequence
 {
-    public:
-        int AddCount();
-        int GetCount() const;
+  public:
+    int AddCount();
+    int GetCount() const;
+    char GetNextChar() const;
+    char SetNextChar(string);
 
-    private:
-        int count_ = 0;
+  private:
+    int count_ = 0;
+    char next_char;
 };
 
 class MarkovModel
 {
-    public:
-        void InsertString();
-        void CharCount(string, int);
-    private:
-        map<string, Sequence> character_map_;
+  public:
+    void InsertString();
+    void CharCount(string, int);
+  private:
+    map<string, Sequence> character_map_;
+    string current_seed;
 };
 
 int main()
 {
-    string fileName;
-    int seed;
+  string fileName;
+  int seed;
 
-    cin >> fileName;
-    cin >> seed;
+  cin >> fileName;
+  cin >> seed;
 
-    MarkovModel sequence_map;
+  MarkovModel sequence_map;
 
-    sequence_map.CharCount(fileName, seed);
+  sequence_map.CharCount(fileName, seed);
 
 }
 
-int Sequence::GetCount() const
-{
-    return count_;
-}
-
-int Sequence::AddCount()
-{
-    count_++;
-}
 
 void MarkovModel::CharCount(string fileName, int seed)
 {
-    ifstream inputFile;
-    inputFile.open(fileName.c_str());
-    int numSequences = 0;
+  ifstream inputFile;
+  inputFile.open(fileName.c_str());
+  int numSequences = 0;
 
-    for(string line; getline(inputFile, line);)
+  for(string line; getline(inputFile, line);)
+  {
+    for(int i = 0; i < line.length(); i++)
     {
-        for(int i = 0; i < line.length(); i++)
-        {
-            string window = "";
+      string window = "";
 
-            for(int j = i; j < (i + seed); j++)
-            {
-                window += line[j];
-                //store characters after this window
-            }
-
-            if(character_map_.count(window) == 0)
-            {
-                Sequence read_window;
-
-                read_window.AddCount();
-                character_map_.insert({window, read_window});
-
-            } else {
-                character_map_[window].AddCount();
-            }
-
-            numSequences++;
-
-            cout << window << endl;
-
-        }
-    }
-
-    //char currSeed = character_map_[window].GetCount();
-
-    /*for(int = i; i < numSequences; i++)
+      for(int j = i; j < (i + seed); j++)
       {
+        window += line[j];
       }
-      */
 
-    for(auto const& pair : character_map_)
-    {
-        cout << pair.first << ": " << pair.second.GetCount() << endl;
+      Sequence read_window;
+
+      if(character_map_.count(window) == 0)
+      {
+        read_window.AddCount();
+        character_map_.insert({window, read_window});
+
+        //read_window.SetNextChar(line[2*seed - 1])
+
+      } else {
+        character_map_[window].AddCount();
+      }
+
+      numSequences++;
+
+      cout << window << endl;
+
     }
+  }
 
+  //char currSeed = character_map_[window].GetCount();
 
-    int max_count = 0;
-    string current_seed;
-
-    for(auto i = character_map_.cbegin(); i != character_map_.cend(); i++)
+  /*for(int = i; i < numSequences; i++)
     {
-        if(i -> second.GetCount() > max_count)
-        {
-            max_count = i -> second.GetCount();
-            current_seed = i -> first;
-        }
     }
+    */
 
-    cout << "FIRST SEED: " << current_seed;
+  for(auto const& pair : character_map_)
+  {
+    cout << pair.first << ": " << pair.second.GetCount() << endl;
+  }
 
-    auto i = character_map_.find(current_seed);
-    i++;
+  int max_count = 0;
 
+  for(auto i = character_map_.cbegin(); i != character_map_.cend(); i++)
+  {
+    if(i -> second.GetCount() > max_count)
+    {
+      max_count = i -> second.GetCount();
+      current_seed = i -> first;
+    }
+  }
+
+  cout << "FIRST SEED: " << current_seed;
 
 }
 
@@ -124,3 +114,22 @@ void MarkovModel::InsertString()
 {
 }
 
+int Sequence::GetCount() const
+{
+  return count_;
+}
+
+int Sequence::AddCount()
+{
+  count_++;
+}
+
+char Sequence::GetNextChar() const
+{
+  return next_char;
+}
+
+char Sequence::SetNextChar(string char_window)
+{
+  //next_char = char_window;
+}
