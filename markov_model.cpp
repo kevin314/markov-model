@@ -13,8 +13,8 @@ class Sequence
   public:
     int AddCount();
     int GetCount() const;
-    char GetNextChar() const;
-    char SetNextChar(string);
+    map<char, int> GetNextCharCount() const;
+    char SetNextChar(char);
 
   private:
     int count_ = 0;
@@ -63,20 +63,16 @@ void MarkovModel::CharCount(string fileName, int seed)
         window += line[j];
       }
 
-      char 
-
       if(character_map_.count(window) == 0)
       {
         Sequence read_window;
 
         read_window.AddCount();
-        read_window.SetNextChar(line[i + seed]);
+        read_window.SetNextChar(line[(2 * seed) - 1]);
         character_map_.insert({window, read_window});
-        //read_window.SetNextChar(line[2*seed - 1])
-
       } else {
         character_map_[window].AddCount();
-        character_map_[window].SetNextChar(line[i + seed]);
+        character_map_[window].SetNextChar(line[(2 * seed) - 1]);
       }
 
 
@@ -94,11 +90,23 @@ void MarkovModel::CharCount(string fileName, int seed)
     {
     }
     */
+  for(auto i = character_map_.cbegin(); i != character_map_.cend(); i++)
+  {
+    cout << i -> first << ": " << i -> second.GetCount() << endl;
 
-  for(auto const& pair : character_map_)
+    for(auto j = i -> second.GetNextCharCount().cbegin();
+        j != i -> second.GetNextCharCount().cend(); j++)
+    {
+      cout << "Next char: " << j -> first << " Next char count: " <<
+      j -> second << endl;
+    }
+  }
+
+  /*for(auto const& pair : character_map_)
   {
     cout << pair.first << ": " << pair.second.GetCount() << endl;
   }
+  */
 
   int max_count = 0;
 
@@ -129,14 +137,18 @@ int Sequence::AddCount()
   count_++;
 }
 
-char Sequence::GetNextChar() const
+map<char, int> Sequence::GetNextCharCount() const
 {
-  return next_char;
+  return nextchar_map_;
 }
 
-char Sequence::SetNextChar(string char_window)
+char Sequence::SetNextChar(char next_char)
 {
-  if(nextchar_map_.count(
-  nextchar_map_.insert({next_char, charcount});
-
+  if(nextchar_map_.count(next_char) == 0)
+  {
+    int char_count = 1;
+    nextchar_map_.insert({next_char, char_count});
+  } else {
+    nextchar_map_[next_char]++;
+  }
 }
