@@ -18,7 +18,7 @@ class Sequence
 
   private:
     int count_ = 0;
-    char next_char;
+    map<char, int>nextchar_map_;
 };
 
 class MarkovModel
@@ -63,18 +63,23 @@ void MarkovModel::CharCount(string fileName, int seed)
         window += line[j];
       }
 
-      Sequence read_window;
+      char 
 
       if(character_map_.count(window) == 0)
       {
-        read_window.AddCount();
-        character_map_.insert({window, read_window});
+        Sequence read_window;
 
+        read_window.AddCount();
+        read_window.SetNextChar(line[i + seed]);
+        character_map_.insert({window, read_window});
         //read_window.SetNextChar(line[2*seed - 1])
 
       } else {
         character_map_[window].AddCount();
+        character_map_[window].SetNextChar(line[i + seed]);
       }
+
+
 
       numSequences++;
 
@@ -131,5 +136,7 @@ char Sequence::GetNextChar() const
 
 char Sequence::SetNextChar(string char_window)
 {
-  //next_char = char_window;
+  if(nextchar_map_.count(
+  nextchar_map_.insert({next_char, charcount});
+
 }
